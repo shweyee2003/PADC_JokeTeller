@@ -1,45 +1,42 @@
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.MainFragment">
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/margin_medium_2"
+    android:paddingRight="@dimen/margin_medium_2"
+    android:paddingBottom="4dp"
     android:paddingTop="4dp">
-    <TextView
+
+    <com.example.windows.week3_exercise.components.textviews.MMTextView
         android:id="@+id/tv_title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/joke1_title"
-        android:textSize="15dp"
-        android:layout_marginBottom="3dp"
-        android:layout_marginTop="2dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-       />
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-     <LinearLayout
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:orientation="vertical">
-         <ImageView
+        tools:text="@string/joke1_title"
+        android:textSize="@dimen/text_regular_3x"
+        android:lineSpacingMultiplier="1.4" />
+       <ImageView
              android:id="@+id/imgv_joke"
-             android:layout_width="match_parent"
+             android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:src="@drawable/joke_1"
-             android:layout_marginBottom="3dp"
-             android:scaleType="centerCrop"/>
-         <TextView
+             android:layout_marginTop="@dimen/margin_medium_2"
+             />
+       <com.example.windows.week3_exercise.components.textviews.MMTextView
              android:id="@+id/tv_body"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:text="@string/joke1_text"
-             android:textSize="12dp"
+             android:layout_marginTop="@dimen/margin_medium_2"
              android:lineSpacingMultiplier="1.2"/>
-
-     </LinearLayout>
-    </ScrollView>
 </LinearLayout>
+
+</ScrollView>
+
 

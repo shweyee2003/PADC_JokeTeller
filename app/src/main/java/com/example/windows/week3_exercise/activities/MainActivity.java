@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -15,12 +16,16 @@ import android.widget.Toast;
 
 import com.example.windows.week3_exercise.R;
 import com.example.windows.week3_exercise.fragments.MainFragment;
+import com.example.windows.week3_exercise.utils.JokeTellerConstants;
 
 public class MainActivity extends AppCompatActivity {
-    private   int i=0;
-  //  int histprvradioid=0;
-    //int histnextradioid=0;
-    int selectedId;
+    private   int jokeindex=-1;
+
+    private FrameLayout flContainer;
+    private Button btnnext;
+    private Button btnprevious;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,48 +42,38 @@ public class MainActivity extends AppCompatActivity {
 //                        .setAction("Action", null).show();
 //            }
 //        });
-        MainFragment mainActivityFragment=new MainFragment();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fl_container,mainActivityFragment).
-                commit();
 
-        final Button btnprevious=(Button)findViewById(R.id.btn_previous);
-        final Button btnnext=(Button)findViewById(R.id.btn_next);
-        RadioGroup rd_btn_grp=(RadioGroup)findViewById(R.id.rdbtn_group);
-        selectedId = rd_btn_grp.getCheckedRadioButtonId();
+        flContainer = (FrameLayout) findViewById(R.id.fl_container);
 
+        if(savedInstanceState==null)
+        {
+            jokeindex++;
+            MainFragment mainActivityFragment=MainFragment.newInstance(jokeindex);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fl_container,mainActivityFragment).
+                    commit();
+
+        }
+
+        btnprevious=(Button)findViewById(R.id.btn_previous);
+        btnnext=(Button)findViewById(R.id.btn_next);
 
         btnprevious.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                i--;
-                RadioButton btn_radioprev;
-                btnprevious.setEnabled(true);
-                btnnext.setEnabled(true);
-                if(i<0)
-                {
-                    i=0;
-                    btnprevious.setEnabled(false);
-                    Toast.makeText(MainActivity.this,"No Record",Toast.LENGTH_SHORT).show();
+                jokeindex--;
+                if(jokeindex>=0){
+                    MainFragment fragment = MainFragment.newInstance(jokeindex);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fl_container, fragment)
+                            .commit();
                 }
-                else
-                {
-                    btnprevious.setEnabled(true);
-                    changedata();
-                  //  histprvradioid=selectedId;
+                else {
+                    jokeindex=0;
+                   // btnnext.setEnabled(false);
+                    Toast.makeText(getApplicationContext(), R.string.msg_no_more_joke, Toast.LENGTH_SHORT).show();
                 }
-//                if(histnextradioid==0)
-//                {
-//                    btn_radioprev =(RadioButton)findViewById(selectedId);
-//                }
-//                else
-//                {
-//                    btn_radioprev=(RadioButton)findViewById(histnextradioid);
-//                }
-               // RadioButton btn_radioprev=(RadioButton)findViewById(selectedId);
-
-
             }
         });
 
@@ -86,75 +81,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                RadioButton btn_radionext;
-                btnprevious.setEnabled(true);
-                btnnext.setEnabled(true);
-                i++;
-                if(i>2)
+                jokeindex++;
+                if(jokeindex< JokeTellerConstants.TOTAL_JOKES)
                 {
-                    i=2;
-                    btnnext.setEnabled(false);
-                    Toast.makeText(MainActivity.this,"No Record",Toast.LENGTH_SHORT).show();
+                    MainFragment fragment = MainFragment.newInstance(jokeindex);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fl_container, fragment)
+                            .commit();
                 }
                 else
                 {
-                    btnnext.setEnabled(true);
-                  //  histnextradioid=selectedId;
-                    changedata();
+                    jokeindex=JokeTellerConstants.TOTAL_JOKES-1;
+                    Toast.makeText(getApplicationContext(), R.string.msg_no_more_joke, Toast.LENGTH_SHORT).show();
                 }
-//                if(histprvradioid==0)
-//                {
-//                    btn_radionext =(RadioButton)findViewById(selectedId);
-//                }
-//                else
-//                {
-//                    btn_radionext=(RadioButton)findViewById(histprvradioid);
-//                }
-//                // RadioButton btn_radioprev=(RadioButton)findViewById(selectedId);
-//                histnextradioid=selectedId;
-//                Toast.makeText(MainActivity.this,btn_radionext.getText(),Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void changedata(){
-        TextView tv_title=(TextView) findViewById(R.id.tv_title);
-        ImageView imgview=(ImageView)findViewById(R.id.imgv_joke);
-        TextView tv_body=(TextView)findViewById(R.id.tv_body);
-
-
-        switch(i)
-        {
-            case 0:
-                tv_title.setText(R.string.joke1_title);
-                imgview.setImageResource(R.drawable.joke_1);
-                tv_body.setText(R.string.joke1_text);
-
-                break;
-            case 1:
-                tv_title.setText(R.string.joke2_title);
-                imgview.setImageResource(R.drawable.joke_2);
-                tv_body.setText(R.string.joke2_text);
-             //   btn_radio=(RadioButton)findViewById(selectedId);
-               // Toast.makeText(MainActivity.this,btn_radio.getText(),Toast.LENGTH_SHORT).show();
-                //RadioButton btn2_radio=(RadioButton)findViewById(selectedId);
-                //btn2_radio.setChecked(true);
-                break;
-            default:
-                tv_title.setText(R.string.joke3_title);
-                imgview.setImageResource(R.drawable.joke_3);
-                tv_body.setText(R.string.joke3_text);
-            //    btn_radio=(RadioButton)findViewById(selectedId);
-              //  Toast.makeText(MainActivity.this,btn_radio.getText(),Toast.LENGTH_SHORT).show();
-                //RadioButton btn3_radio=(RadioButton)findViewById(selectedId);
-                //btn3_radio.setChecked(true);
-               // Toast.makeText(MainActivity.this,btn_radio.getText(),Toast.LENGTH_SHORT).show();
-                break;
-        }
-       // RadioButton btn_radio=(RadioButton)findViewById(selectedId);
-       // RadioButton btnprev_radio=(RadioButton)findViewById(histprvradioid);
-       // Toast.makeText(MainActivity.this,btn_radio.getText(),Toast.LENGTH_SHORT).show();
-       // Toast.makeText(MainActivity.this,btnprev_radio.getText(),Toast.LENGTH_SHORT).show();
     }
 
     @Override
